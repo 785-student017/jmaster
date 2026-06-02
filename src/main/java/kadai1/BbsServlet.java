@@ -1,6 +1,5 @@
 package kadai1;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -24,6 +23,9 @@ public class BbsServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        // 入力メッセージ取得
+        String message = request.getParameter("message");
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
@@ -34,14 +36,20 @@ public class BbsServlet extends HttpServlet {
         out.println("</head>");
         out.println("<body>");
 
-        out.println("メッセージ：<br>");
+        out.println("<h3>メッセージ：</h3>");
 
         out.println("<form action='/jmaster/BbsServlet' method='post'>");
-        out.println("<textarea name='message' style='width:300px; height:100px;'></textarea><br>");
+        out.println("<textarea name='message' style='width:400px; height:100px;'></textarea><br>");
         out.println("<button type='submit'>書き込み</button>");
         out.println("</form>");
 
         out.println("<hr>");
+
+        // 入力内容を表示
+        if (message != null && !message.isEmpty()) {
+            out.println(message + "<br>");
+            out.println("<hr>");
+        }
 
         out.println("</body>");
         out.println("</html>");
