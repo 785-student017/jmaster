@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/BbsServlet")
 public class BbsServlet extends HttpServlet {
 
-    // リストで補完
     private List<String> messages = new ArrayList<>();
 
     protected void doGet(HttpServletRequest request,
@@ -31,11 +30,17 @@ public class BbsServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         // 取得
+        String name = request.getParameter("name");
         String message = request.getParameter("message");
 
-        // 空でなければ保存
+        // 名前が空なら「匿名」
+        if (name == null || name.isEmpty()) {
+            name = "匿名";
+        }
+
+        // メッセージがある場合だけ保存
         if (message != null && !message.isEmpty()) {
-            messages.add(message);
+            messages.add(name + "：" + message);
         }
 
         response.setContentType("text/html;charset=UTF-8");
@@ -50,15 +55,18 @@ public class BbsServlet extends HttpServlet {
 
         out.println("<h3>メッセージ：</h3>");
 
-        // 入力フォーム
+        // フォーム
         out.println("<form action='/jmaster/BbsServlet' method='post'>");
+        out.println("名前：<br>");
+        out.println("<input type='text' name='name' style='width:200px;'><br><br>");
+        out.println("メッセージ：<br>");
         out.println("<textarea name='message' style='width:400px; height:100px;'></textarea><br>");
         out.println("<button type='submit'>書き込み</button>");
         out.println("</form>");
 
         out.println("<hr>");
 
-        // 投稿一覧表示（区切り線付き）
+        // 表示
         for (String m : messages) {
             out.println("<div>" + m + "</div>");
             out.println("<hr>");
